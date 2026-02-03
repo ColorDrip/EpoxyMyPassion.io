@@ -1,70 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Table with Sticky Save Button</title>
-  <link rel="stylesheet" href="style.css">
+<div class="table-container">
+  <table class="styled-table">
+    <thead>
+      <tr>
+        <th>Employee</th>
+        <th>Project</th>
+        <th>Role</th>
+        <th>Location</th>
+        <th>Status</th>
 
+        <!-- Hour columns -->
+        <th>Mon (hrs)</th>
+        <th>Tue (hrs)</th>
+        <th>Wed (hrs)</th>
+        <th>Thu (hrs)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Anil</td>
+        <td>Automation</td>
+        <td>Lead</td>
+        <td>India</td>
+        <td>Active</td>
 
-</head>
-<body>
-
-<div class="page-wrapper">
-
-  <div class="table-container">
-    <table class="styled-table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Department</th>
-          <th>Role</th>
-          <th>Location</th>
-          <th>Status</th>
-          <th>Score</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- 10 sample rows -->
-        <tr><td>1</td><td>Anil</td><td>Automation</td><td>Lead</td><td>India</td><td>Active</td><td>92</td></tr>
-        <tr><td>2</td><td>Ravi</td><td>Data</td><td>Analyst</td><td>India</td><td>Active</td><td>88</td></tr>
-        <tr><td>3</td><td>Sneha</td><td>AI</td><td>Engineer</td><td>UK</td><td>Active</td><td>90</td></tr>
-        <tr><td>4</td><td>John</td><td>Finance</td><td>Manager</td><td>US</td><td>Inactive</td><td>75</td></tr>
-        <tr><td>5</td><td>Pooja</td><td>Automation</td><td>Developer</td><td>India</td><td>Active</td><td>85</td></tr>
-        <tr><td>6</td><td>Alex</td><td>ML</td><td>Scientist</td><td>Germany</td><td>Active</td><td>93</td></tr>
-        <tr><td>7</td><td>Neha</td><td>QA</td><td>Tester</td><td>India</td><td>Active</td><td>80</td></tr>
-        <tr><td>8</td><td>David</td><td>Ops</td><td>Engineer</td><td>US</td><td>Inactive</td><td>70</td></tr>
-        <tr><td>9</td><td>Mehul</td><td>Data</td><td>Engineer</td><td>India</td><td>Active</td><td>89</td></tr>
-        <tr><td>10</td><td>Lina</td><td>AI</td><td>Researcher</td><td>France</td><td>Active</td><td>91</td></tr>
-      </tbody>
-    </table>
-  </div>
-
+        <td><input type="number" class="hour-input" min="0" max="24"></td>
+        <td><input type="number" class="hour-input" min="0" max="24"></td>
+        <td><input type="number" class="hour-input" min="0" max="24"></td>
+        <td><input type="number" class="hour-input" min="0" max="24"></td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
-<!-- Sticky Footer -->
-<div class="sticky-footer">
-  <button class="save-btn">Save</button>
-</div>
 
-</body>
-</html>
-
-
-/* Base */
-body {
-  margin: 0;
-  font-family: "Segoe UI", Arial, sans-serif;
-  background: #f4f6f9;
-}
-
-/* Page wrapper */
-.page-wrapper {
-  padding: 20px;
-  padding-bottom: 90px; /* Space for sticky button */
-}
-
-/* Table container */
 .table-container {
   overflow-x: auto;
   background: #fff;
@@ -72,63 +40,43 @@ body {
   box-shadow: 0 6px 20px rgba(0,0,0,0.08);
 }
 
-/* Table */
 .styled-table {
   width: 100%;
-  min-width: 900px;
+  min-width: 1100px;
   border-collapse: collapse;
 }
 
-/* Header */
-.styled-table thead th {
-  position: sticky;
-  top: 0;
+.styled-table th {
   background: #2f80ed;
-  color: #fff;
+  color: white;
   padding: 12px;
   text-align: left;
+  position: sticky;
+  top: 0;
 }
 
-/* Body */
 .styled-table td {
-  padding: 12px;
+  padding: 10px;
   border-bottom: 1px solid #eaeaea;
 }
 
-.styled-table tbody tr:nth-child(even) {
+/* Non-hour columns */
+.styled-table td:nth-child(-n+5) {
   background: #f8fafc;
+  color: #555;
 }
 
-.styled-table tbody tr:hover {
-  background: #eaf2ff;
+/* Hour input fields */
+.hour-input {
+  width: 70px;
+  padding: 6px;
+  text-align: right;
+  border-radius: 6px;
+  border: 1px solid #ccc;
 }
 
-/* Sticky Footer */
-.sticky-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: #ffffff;
-  padding: 15px 20px;
-  box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
-  display: flex;
-  justify-content: flex-end;
-  z-index: 1000;
-}
-
-/* Save Button */
-.save-btn {
-  background: #2f80ed;
-  color: #ffffff;
-  border: none;
-  padding: 12px 28px;
-  font-size: 15px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.save-btn:hover {
-  background: #1f6fe0;
+.hour-input:focus {
+  border-color: #2f80ed;
+  outline: none;
+  background: #eef4ff;
 }
