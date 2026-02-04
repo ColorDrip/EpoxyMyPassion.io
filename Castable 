@@ -2,13 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Dynamic Hours Entry Table</title>
+<title>Tabbed Dynamic Hours Table</title>
 
 <style>
-/* ========== Base ========== */
-* {
-  box-sizing: border-box;
-}
+/* ========= Base ========= */
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
@@ -17,13 +15,44 @@ body {
   overflow-x: hidden;
 }
 
-/* ========== Page Layout ========== */
-.page-wrapper {
-  padding: 20px;
-  padding-bottom: 90px; /* space for footer */
+/* ========= Tabs ========= */
+.tabs-wrapper {
+  background: #ffffff;
+  padding: 12px 16px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  position: sticky;
+  top: 0;
+  z-index: 200;
 }
 
-/* ========== Table Container ========== */
+.tabs {
+  display: flex;
+  gap: 10px;
+}
+
+.tab-btn {
+  padding: 10px 18px;
+  border-radius: 20px;
+  border: 1px solid #d0d7e2;
+  background: #f1f3f6;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.tab-btn.active {
+  background: #2f80ed;
+  color: #ffffff;
+  border-color: #2f80ed;
+}
+
+/* ========= Page Layout ========= */
+.page-wrapper {
+  padding: 20px;
+  padding-bottom: 90px;
+}
+
+/* ========= Table ========= */
 .table-container {
   background: #ffffff;
   border-radius: 12px;
@@ -31,44 +60,38 @@ body {
   overflow-x: auto;
 }
 
-/* ========== Table ========== */
 .styled-table {
   width: 100%;
   min-width: 1200px;
   border-collapse: collapse;
 }
 
-/* Header */
-.styled-table thead th {
+.styled-table th {
   position: sticky;
-  top: 0;
+  top: 52px; /* below tabs */
   background: #2f80ed;
   color: #ffffff;
   padding: 14px;
   text-align: left;
   font-size: 14px;
-  z-index: 1;
 }
 
-/* Body cells */
 .styled-table td {
   padding: 12px;
-  font-size: 14px;
   border-bottom: 1px solid #eaeaea;
+  font-size: 14px;
 }
 
-/* Zebra rows */
 .styled-table tbody tr:nth-child(even) {
   background: #f8fafc;
 }
 
-/* Hover */
 .styled-table tbody tr:hover {
   background: #eaf2ff;
 }
 
-/* Read-only columns (first 5) */
-.styled-table td.readonly {
+/* Read-only columns */
+.readonly {
   background: #f1f3f6;
   color: #555;
 }
@@ -76,11 +99,10 @@ body {
 /* Hour input */
 .hour-input {
   width: 70px;
-  padding: 6px 8px;
+  padding: 6px;
   text-align: right;
   border-radius: 6px;
   border: 1px solid #ccc;
-  font-size: 13px;
 }
 
 .hour-input:focus {
@@ -89,13 +111,21 @@ body {
   background: #eef4ff;
 }
 
-/* Total column */
 .total-cell {
   font-weight: 600;
   color: #2f80ed;
 }
 
-/* ========== Sticky Footer ========== */
+/* ========= Tabs Content ========= */
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* ========= Sticky Footer ========= */
 .sticky-footer {
   position: fixed;
   bottom: 0;
@@ -106,10 +136,9 @@ body {
   box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
   display: flex;
   justify-content: flex-end;
-  z-index: 1000;
+  z-index: 300;
 }
 
-/* Save Button */
 .save-btn {
   background: #2f80ed;
   color: #ffffff;
@@ -124,118 +153,130 @@ body {
 .save-btn:hover {
   background: #1f6fe0;
 }
-
-/* Mobile */
-@media (max-width: 600px) {
-  .sticky-footer {
-    justify-content: center;
-  }
-}
 </style>
 </head>
 
 <body>
 
+<!-- ===== Tabs ===== -->
+<div class="tabs-wrapper">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="openTab(0)">Week 1</button>
+    <button class="tab-btn" onclick="openTab(1)">Week 2</button>
+    <button class="tab-btn" onclick="openTab(2)">Week 3</button>
+    <button class="tab-btn" onclick="openTab(3)">Week 4</button>
+  </div>
+</div>
+
 <div class="page-wrapper">
 
-  <div class="table-container">
-    <table class="styled-table" id="hoursTable">
-      <thead>
-        <tr>
-          <!-- 5 Non-editable columns -->
-          <th>Employee</th>
-          <th>Project</th>
-          <th>Role</th>
-          <th>Location</th>
-          <th>Status</th>
-
-          <!-- 4 Hour columns -->
-          <th>Mon</th>
-          <th>Tue</th>
-          <th>Wed</th>
-          <th>Thu</th>
-
-          <!-- Total -->
-          <th>Total</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr>
-          <td class="readonly">Anil</td>
-          <td class="readonly">Automation</td>
-          <td class="readonly">Lead</td>
-          <td class="readonly">India</td>
-          <td class="readonly">Active</td>
-
-          <td><input type="number" class="hour-input" min="0" max="24"></td>
-          <td><input type="number" class="hour-input" min="0" max="24"></td>
-          <td><input type="number" class="hour-input" min="0" max="24"></td>
-          <td><input type="number" class="hour-input" min="0" max="24"></td>
-
-          <td class="total-cell">0</td>
-        </tr>
-
-        <tr>
-          <td class="readonly">Sneha</td>
-          <td class="readonly">AI</td>
-          <td class="readonly">Engineer</td>
-          <td class="readonly">UK</td>
-          <td class="readonly">Active</td>
-
-          <td><input type="number" class="hour-input" min="0" max="24"></td>
-          <td><input type="number" class="hour-input" min="0" max="24"></td>
-          <td><input type="number" class="hour-input" min="0" max="24"></td>
-          <td><input type="number" class="hour-input" min="0" max="24"></td>
-
-          <td class="total-cell">0</td>
-        </tr>
-
-      </tbody>
-    </table>
+  <!-- ===== TAB 1 ===== -->
+  <div class="tab-content active">
+    <div class="table-container">
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>Employee</th>
+            <th>Project</th>
+            <th>Role</th>
+            <th>Location</th>
+            <th>Status</th>
+            <th>Mon</th>
+            <th>Tue</th>
+            <th>Wed</th>
+            <th>Thu</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="readonly">Anil</td>
+            <td class="readonly">Automation</td>
+            <td class="readonly">Lead</td>
+            <td class="readonly">India</td>
+            <td class="readonly">Active</td>
+            <td><input class="hour-input" type="number"></td>
+            <td><input class="hour-input" type="number"></td>
+            <td><input class="hour-input" type="number"></td>
+            <td><input class="hour-input" type="number"></td>
+            <td class="total-cell">0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
+
+  <!-- ===== TAB 2 ===== -->
+  <div class="tab-content">
+    <div class="table-container">
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>Employee</th>
+            <th>Project</th>
+            <th>Role</th>
+            <th>Location</th>
+            <th>Status</th>
+            <th>Mon</th>
+            <th>Tue</th>
+            <th>Wed</th>
+            <th>Thu</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="readonly">Sneha</td>
+            <td class="readonly">AI</td>
+            <td class="readonly">Engineer</td>
+            <td class="readonly">UK</td>
+            <td class="readonly">Active</td>
+            <td><input class="hour-input" type="number"></td>
+            <td><input class="hour-input" type="number"></td>
+            <td><input class="hour-input" type="number"></td>
+            <td><input class="hour-input" type="number"></td>
+            <td class="total-cell">0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Tabs 3 & 4 can follow same pattern -->
 
 </div>
 
-<!-- Sticky Save Button -->
+<!-- ===== Sticky Save ===== -->
 <div class="sticky-footer">
   <button class="save-btn" onclick="saveData()">Save</button>
 </div>
 
 <script>
-/* ========== Auto Total Calculation ========== */
-document.querySelectorAll(".hour-input").forEach(input => {
-  input.addEventListener("input", calculateTotals);
-});
+/* ===== Tab Switching ===== */
+function openTab(index) {
+  document.querySelectorAll(".tab-btn").forEach((btn, i) => {
+    btn.classList.toggle("active", i === index);
+  });
 
-function calculateTotals() {
-  document.querySelectorAll("#hoursTable tbody tr").forEach(row => {
-    let total = 0;
-    row.querySelectorAll(".hour-input").forEach(input => {
-      total += Number(input.value) || 0;
-    });
-    row.querySelector(".total-cell").innerText = total;
+  document.querySelectorAll(".tab-content").forEach((tab, i) => {
+    tab.classList.toggle("active", i === index);
   });
 }
 
-/* ========== Save Action (demo) ========== */
+/* ===== Auto Total ===== */
+document.addEventListener("input", function (e) {
+  if (e.target.classList.contains("hour-input")) {
+    const row = e.target.closest("tr");
+    let total = 0;
+    row.querySelectorAll(".hour-input").forEach(i => {
+      total += Number(i.value) || 0;
+    });
+    row.querySelector(".total-cell").innerText = total;
+  }
+});
+
+/* ===== Save (demo) ===== */
 function saveData() {
-  const data = [];
-
-  document.querySelectorAll("#hoursTable tbody tr").forEach(row => {
-    const rowData = {
-      employee: row.cells[0].innerText,
-      project: row.cells[1].innerText,
-      role: row.cells[2].innerText,
-      location: row.cells[3].innerText,
-      status: row.cells[4].innerText,
-      hours: Array.from(row.querySelectorAll(".hour-input")).map(i => i.value || 0),
-      total: row.querySelector(".total-cell").innerText
-    };
-    data.push(rowData);
-  });
-
-  console.log("Saved Data:", data);
   alert("Data saved successfully!");
 }
 </script>
