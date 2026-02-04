@@ -5,8 +5,10 @@
 <title>Tabbed Dynamic Hours Table</title>
 
 <style>
-/* ========= Base ========= */
-* { box-sizing: border-box; }
+/* ================= BASE ================= */
+* {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
@@ -15,14 +17,14 @@ body {
   overflow-x: hidden;
 }
 
-/* ========= Tabs ========= */
+/* ================= TABS ================= */
 .tabs-wrapper {
+  position: sticky;
+  top: 0;
   background: #ffffff;
   padding: 12px 16px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-  position: sticky;
-  top: 0;
-  z-index: 200;
+  z-index: 100;
 }
 
 .tabs {
@@ -37,7 +39,6 @@ body {
   background: #f1f3f6;
   cursor: pointer;
   font-size: 14px;
-  font-weight: 500;
 }
 
 .tab-btn.active {
@@ -46,18 +47,19 @@ body {
   border-color: #2f80ed;
 }
 
-/* ========= Page Layout ========= */
+/* ================= PAGE ================= */
 .page-wrapper {
   padding: 20px;
-  padding-bottom: 90px;
+  padding-bottom: 90px; /* space for save button */
 }
 
-/* ========= Table ========= */
+/* ================= TABLE ================= */
 .table-container {
   background: #ffffff;
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.08);
   overflow-x: auto;
+  width: 100%;
 }
 
 .styled-table {
@@ -66,16 +68,19 @@ body {
   border-collapse: collapse;
 }
 
-.styled-table th {
+/* Header (FIXED ISSUE HERE) */
+.styled-table thead th {
   position: sticky;
-  top: 52px; /* below tabs */
+  top: 0;
   background: #2f80ed;
   color: #ffffff;
   padding: 14px;
   text-align: left;
   font-size: 14px;
+  z-index: 2;
 }
 
+/* Body */
 .styled-table td {
   padding: 12px;
   border-bottom: 1px solid #eaeaea;
@@ -111,12 +116,13 @@ body {
   background: #eef4ff;
 }
 
+/* Total */
 .total-cell {
   font-weight: 600;
   color: #2f80ed;
 }
 
-/* ========= Tabs Content ========= */
+/* ================= TAB CONTENT ================= */
 .tab-content {
   display: none;
 }
@@ -125,7 +131,7 @@ body {
   display: block;
 }
 
-/* ========= Sticky Footer ========= */
+/* ================= FOOTER ================= */
 .sticky-footer {
   position: fixed;
   bottom: 0;
@@ -136,7 +142,7 @@ body {
   box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
   display: flex;
   justify-content: flex-end;
-  z-index: 300;
+  z-index: 200;
 }
 
 .save-btn {
@@ -158,7 +164,7 @@ body {
 
 <body>
 
-<!-- ===== Tabs ===== -->
+<!-- ================= TABS ================= -->
 <div class="tabs-wrapper">
   <div class="tabs">
     <button class="tab-btn active" onclick="openTab(0)">Week 1</button>
@@ -170,7 +176,7 @@ body {
 
 <div class="page-wrapper">
 
-  <!-- ===== TAB 1 ===== -->
+  <!-- ========== TAB 1 ========== -->
   <div class="tab-content active">
     <div class="table-container">
       <table class="styled-table">
@@ -206,7 +212,7 @@ body {
     </div>
   </div>
 
-  <!-- ===== TAB 2 ===== -->
+  <!-- ========== TAB 2 ========== -->
   <div class="tab-content">
     <div class="table-container">
       <table class="styled-table">
@@ -242,17 +248,15 @@ body {
     </div>
   </div>
 
-  <!-- Tabs 3 & 4 can follow same pattern -->
-
 </div>
 
-<!-- ===== Sticky Save ===== -->
+<!-- ================= FOOTER ================= -->
 <div class="sticky-footer">
   <button class="save-btn" onclick="saveData()">Save</button>
 </div>
 
 <script>
-/* ===== Tab Switching ===== */
+/* ===== TAB SWITCH ===== */
 function openTab(index) {
   document.querySelectorAll(".tab-btn").forEach((btn, i) => {
     btn.classList.toggle("active", i === index);
@@ -263,19 +267,19 @@ function openTab(index) {
   });
 }
 
-/* ===== Auto Total ===== */
+/* ===== AUTO TOTAL ===== */
 document.addEventListener("input", function (e) {
   if (e.target.classList.contains("hour-input")) {
     const row = e.target.closest("tr");
     let total = 0;
-    row.querySelectorAll(".hour-input").forEach(i => {
-      total += Number(i.value) || 0;
+    row.querySelectorAll(".hour-input").forEach(input => {
+      total += Number(input.value) || 0;
     });
     row.querySelector(".total-cell").innerText = total;
   }
 });
 
-/* ===== Save (demo) ===== */
+/* ===== SAVE (DEMO) ===== */
 function saveData() {
   alert("Data saved successfully!");
 }
